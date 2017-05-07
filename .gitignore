@@ -1,0 +1,11 @@
+Makefile
+*~
+*.user
+recv/bin/*
+recv/build/*
+recv/Makefile
+tran/bin/*
+tran/build/*
+tran/Makefile
+tags
+cscope.out
