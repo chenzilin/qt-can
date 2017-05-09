@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         qDebug() << can;
     }
 
-    Recv *recv = new Recv(can.toStdString());
+    Recv recv(can.toStdString());
     Q_UNUSED(recv);
 
     QQuickView viewer;

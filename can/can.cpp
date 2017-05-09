@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QtConcurrent>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -15,6 +16,7 @@
 Can::Can(const std::string &interface, bool block)
     : m_fd(-1), m_block(block), m_interface(interface)
 {
+    qRegisterMetaType<can_frame>("can_frame");
 }
 
 Can::~Can()
@@ -43,15 +45,20 @@ void Can::read(int fd)
         return true;
     };
 
-    while (readCan(&frame)) {
-        // error frame
-        if (frame.can_id & CAN_ERR_FLAG)
-            continue;
+    auto loopReadCan = [=](auto readCan, auto frame) {
 
-        qDebug() << "can_id:" << frame.can_id
-                 << "can_dlc:" << frame.can_dlc;
-        emit readyRead(frame);
-    }
+        while (readCan(&frame)) {
+            // error frame
+            if (frame.can_id & CAN_ERR_FLAG)
+                continue;
+
+            qDebug() << "can_id:" << frame.can_id
+                     << "can_dlc:" << frame.can_dlc;
+            emit this->readyRead(frame);
+        }
+    };
+
+    QtConcurrent::run(loopReadCan, readCan, frame);
 }
 
 bool Can::open()

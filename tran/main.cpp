@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         qDebug() << can;
     }
 
-    Tran *tran = new Tran(can.toStdString());
+    Tran tran(can.toStdString());
     Q_UNUSED(tran);
 
     QQuickView viewer;
