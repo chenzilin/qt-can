@@ -11,11 +11,14 @@ Recv::Recv(const std::string &interface, bool block)
 
 void Recv::onRecvCan(struct can_frame frame)
 {
-    qWarning() << "can_id: " << frame.can_id;
+    if (frame.can_id & CAN_ERR_FLAG) {
+        qWarning() << "Recv error Can Frame!";
+        return ;
+    }
 
     switch (frame.can_id & CAN_SFF_MASK) {
     case 0x0AA:
-        qWarning() << "Recv standard Can Frame! ";
+        qWarning() << "Recv standard Can Frame! " << "can_id: " << 0x0AA;
         break;
     default:
         break;
@@ -23,11 +26,9 @@ void Recv::onRecvCan(struct can_frame frame)
 
     switch (frame.can_id & CAN_EFF_MASK) {
     case 0x0AA:
-        qWarning() << "Recv extended Can Frame! ";
+        qWarning() << "Recv extended Can Frame! " << "can_id: " << 0x0AA;;
         break;
     default:
         break;
     }
-
-
 }

@@ -1,6 +1,7 @@
 Makefile
 *~
 *.user
+.qmake.stash
 recv/bin/*
 recv/build/*
 recv/Makefile
