@@ -1,0 +1,7 @@
+*.o
+*.swap
+bin/
+build/
+Makefile
+*.pro.user
+.qmake.stash
